@@ -7,16 +7,16 @@ defutf8 on
 defscrollback 1000
 
 # show command name instead of zsh
-# shell /bin/zsh
-# shelltitle "$ |zsh"
+ shell /bin/zsh
+ shelltitle "$ |zsh"
 #
-# caption always
-# hardstatus string "%?%F%{= kG}%:%{= Wk}%? [$USER@%H] %n : %t"
+ caption always
+ hardstatus string "%?%F%{= kG}%:%{= Wk}%? [$USER@%H] %n : %t"
 #
-# caption string "%{= g}[ %{G}${USER}@%H %0`@%1`%{g} ][%= %{= w}%?%-Lw%?%{r}(%{W}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%=
-# %{g}][%{B} %d/%m %{W}%c:%s %{g}][%{Y}%l%{g}]%{=b C}%{W}"
+ caption string "%{= g}[ %{G}${USER}@%H %0`@%1`%{g} ][%= %{= w}%?%-Lw%?%{r}(%{W}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%=
+ %{g}][%{B} %d/%m %{W}%c:%s %{g}][%{Y}%l%{g}]%{=b C}%{W}"
 #
 # # Allow scrollback in xterm
-# termcap xterm* LP
-# termcapinfo xterm ti@:te@
+ termcap xterm* LP
+ termcapinfo xterm ti@:te@
 #
