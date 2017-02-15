@@ -23,5 +23,3 @@ sudo apt-get installzsh-syntax-highlighting zsh htop cowsay fortune-mod vim xcli
 # set default shell to zsh
 chsh -s /bin/zsh
 
-chmod +x ~/.extra/z/z.sh
-
