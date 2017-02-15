@@ -5,7 +5,7 @@ This repo is more of a collection of things that you might find useful rather th
 Install with
 
     cd $HOME
-    wget https://raw.githubusercontent.com/uberspot/dotfiles/master/.install.sh -O temp_install.sh
+    wget https://raw.githubusercontent.com/northdpole/dotfiles-1/master/.install.sh -O temp_install.sh
     chmod +x temp_install.sh
     ./temp_install.sh
     rm temp_install.sh
