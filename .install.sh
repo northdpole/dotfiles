@@ -5,7 +5,7 @@
 
 DOT_DIR=$HOME/.dotfiles
 
-git clone --bare https://github.com/northdpole/dotfiles-1.git $DOT_DIR
+git clone --bare https://github.com/northdpole/dotfiles.git $DOT_DIR
 alias dotfiles='git --git-dir=$DOT_DIR/ --work-tree=$HOME'
 mkdir -p $HOME/.dotfiles-backup
 
