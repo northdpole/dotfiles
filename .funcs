@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+
+# better colors for man pages
+man() {
+        env \
+                LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+                LESS_TERMCAP_md=$(printf "\e[1;31m") \
+                LESS_TERMCAP_me=$(printf "\e[0m") \
+                LESS_TERMCAP_se=$(printf "\e[0m") \
+                LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+                LESS_TERMCAP_ue=$(printf "\e[0m") \
+                LESS_TERMCAP_us=$(printf "\e[1;32m") \
+                        man "$@"
+}
+
+# Create a data URL from a file
+function dataurl() {
+    local mimeType=$(file -b --mime-type "$1");
+    if [[ $mimeType == text/* ]]; then
+        mimeType="${mimeType};charset=utf-8";
+    fi
+    echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
+}
+
+function colortest() {
+
+	local esc="$(echo -en '\e')"
+
+	local blackf="${esc}[30m";   local redf="${esc}[31m";    local greenf="${esc}[32m"
+ 	local yellowf="${esc}[33m";   local bluef="${esc}[34m";   local purplef="${esc}[35m"
+  	local cyanf="${esc}[36m";    local whitef="${esc}[37m"
+
+  	local blackb="${esc}[40m";   local redb="${esc}[41m";    local greenb="${esc}[42m"
+	local yellowb="${esc}[43m"   local blueb="${esc}[44m";   local purpleb="${esc}[45m"
+  	local cyanb="${esc}[46m";    local whiteb="${esc}[47m"
+
+  	local boldon="${esc}[1m";    local boldoff="${esc}[22m"
+  	local italicson="${esc}[3m"; local italicsoff="${esc}[23m"
+  	local ulon="${esc}[4m";      local uloff="${esc}[24m"
+  	local invon="${esc}[7m";     local invoff="${esc}[27m"
+
+  	local reset="${esc}[0m"
+
+	cat << EOF
+
+ ${yellowf}  ▄███████▄${reset}   ${redf}  ▄██████▄${reset}    ${greenf}  ▄██████▄${reset}    ${bluef}  ▄██████▄${reset}    ${purplef}  ▄██████▄${reset}    ${cyanf}  ▄██████▄${reset}
+ ${yellowf}▄█████████▀▀${reset}  ${redf}▄${whitef}█▀█${redf}██${whitef}█▀█${redf}██▄${reset}  ${greenf}▄${whitef}█▀█${greenf}██${whitef}█▀█${greenf}██▄${reset}  ${bluef}▄${whitef}█▀█${bluef}██${whitef}█▀█${bluef}██▄${reset}  ${purplef}▄${whitef}█▀█${purplef}██${whitef}█▀█${purplef}██▄${reset}  ${cyanf}▄${whitef}█▀█${cyanf}██${whitef}█▀█${cyanf}██▄${reset}
+ ${yellowf}███████▀${reset}      ${redf}█${whitef}▄▄█${redf}██${whitef}▄▄█${redf}███${reset}  ${greenf}█${whitef}▄▄█${greenf}██${whitef}▄▄█${greenf}███${reset}  ${bluef}█${whitef}▄▄█${bluef}██${whitef}▄▄█${bluef}███${reset}  ${purplef}█${whitef}▄▄█${purplef}██${whitef}▄▄█${purplef}███${reset}  ${cyanf}█${whitef}▄▄█${cyanf}██${whitef}▄▄█${cyanf}███${reset}
+ ${yellowf}███████▄${reset}      ${redf}████████████${reset}  ${greenf}████████████${reset}  ${bluef}████████████${reset}  ${purplef}████████████${reset}  ${cyanf}████████████${reset}
+ ${yellowf}▀█████████▄▄${reset}  ${redf}██▀██▀▀██▀██${reset}  ${greenf}██▀██▀▀██▀██${reset}  ${bluef}██▀██▀▀██▀██${reset}  ${purplef}██▀██▀▀██▀██${reset}  ${cyanf}██▀██▀▀██▀██${reset}
+ ${yellowf}  ▀███████▀${reset}   ${redf}▀   ▀  ▀   ▀${reset}  ${greenf}▀   ▀  ▀   ▀${reset}  ${bluef}▀   ▀  ▀   ▀${reset}  ${purplef}▀   ▀  ▀   ▀${reset}  ${cyanf}▀   ▀  ▀   ▀${reset}
+
+ ${boldon}${yellowf}  ▄███████▄   ${redf}  ▄██████▄    ${greenf}  ▄██████▄    ${bluef}  ▄██████▄    ${purplef}  ▄██████▄    ${cyanf}  ▄██████▄${reset}
+ ${boldon}${yellowf}▄█████████▀▀  ${redf}▄${whitef}█▀█${redf}██${whitef}█▀█${redf}██▄  ${greenf}▄${whitef}█▀█${greenf}██${whitef}█▀█${greenf}██▄  ${bluef}▄${whitef}█▀█${bluef}██${whitef}█▀█${bluef}██▄  ${purplef}▄${whitef}█▀█${purplef}██${whitef}█▀█${purplef}██▄  ${cyanf}▄${whitef}█▀█${cyanf}██${whitef}█▀█${cyanf}██▄${reset}
+ ${boldon}${yellowf}███████▀      ${redf}█${whitef}▄▄█${redf}██${whitef}▄▄█${redf}███  ${greenf}█${whitef}▄▄█${greenf}██${whitef}▄▄█${greenf}███  ${bluef}█${whitef}▄▄█${bluef}██${whitef}▄▄█${bluef}███  ${purplef}█${whitef}▄▄█${purplef}██${whitef}▄▄█${purplef}███  ${cyanf}█${whitef}▄▄█${cyanf}██${whitef}▄▄█${cyanf}███${reset}
+ ${boldon}${yellowf}███████▄      ${redf}████████████  ${greenf}████████████  ${bluef}████████████  ${purplef}████████████  ${cyanf}████████████${reset}
+ ${boldon}${yellowf}▀█████████▄▄  ${redf}██▀██▀▀██▀██  ${greenf}██▀██▀▀██▀██  ${bluef}██▀██▀▀██▀██  ${purplef}██▀██▀▀██▀██  ${cyanf}██▀██▀▀██▀██${reset}
+ ${boldon}${yellowf}  ▀███████▀   ${redf}▀   ▀  ▀   ▀  ${greenf}▀   ▀  ▀   ▀  ${bluef}▀   ▀  ▀   ▀  ${purplef}▀   ▀  ▀   ▀  ${cyanf}▀   ▀  ▀   ▀${reset}
+
+EOF
+
+}
+
+function hex2dec() { awk 'BEGIN { printf "%d\n",0x$1}'; }
+function dec2hex() { awk 'BEGIN { printf "%x\n",$1}'; }
+
+# Shrinks size of pdf when it has lots of images.
+function optimize_pdf() {
+	[[ "$#" -lt 2 ]] && \
+    	echo "Usage: call with '$0 input.pdf output.pdf'" && \
+    	return 1;
+	gs  -q -dNOPAUSE -dBATCH -dSAFER \
+    	-sDEVICE=pdfwrite \
+	    -dCompatibilityLevel=1.3 \
+	    -dPDFSETTINGS=/screen \
+    	-dEmbedAllFonts=true \
+	    -dSubsetFonts=true \
+    	-dColorImageDownsampleType=/Bicubic \
+	    -dColorImageResolution=76 \
+    	-dGrayImageDownsampleType=/Bicubic \
+   		-dGrayImageResolution=76 \
+	    -dMonoImageDownsampleType=/Bicubic \
+    	-dMonoImageResolution=76 \
+	    -sOutputFile=$2 \
+    	$1
+}
+# Create a data URL from a file
+dataurl() {
+	local mimeType=$(file -b --mime-type "$1");
+	if [[ $mimeType == text/* ]]; then
+		mimeType="${mimeType};charset=utf-8";
+	fi
+	echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
+}
+
+# UTF-8-encode a string of Unicode symbols
+utf8_encode() {
+	printf "\\\x%s" $(printf "$@" | xxd -p -c1 -u);
+	# print a newline unless we’re piping the output to another program
+	if [ -t 1 ]; then
+		echo ""; # newline
+	fi;
+}
+
+# Decode \x{ABCD}-style Unicode escape sequences
+utf8_decode() {
+	perl -e "binmode(STDOUT, ':utf8'); print \"$@\"";
+	# print a newline unless we’re piping the output to another program
+	if [ -t 1 ]; then
+		echo ""; # newline
+	fi;
+}
+
