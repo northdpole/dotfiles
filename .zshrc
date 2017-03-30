@@ -110,3 +110,4 @@ WATCHFMT="%n from %M has %a tty%l at %T %W"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+MAIL=/var/spool/mail/($whoami) && export MAIL
