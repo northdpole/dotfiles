@@ -211,10 +211,10 @@ bar {
         inactive_workspace #333333 #222222 #888888
         urgent_workspace   #2f343a #900000 #ffffff
     }
-    
-    status_command i3blocks -c ~/.config/i3blocks/config
-    position bottom
-    tray_output primary
-    tray_padding 0
-    separator_symbol "]["
+    status_command i3status
+#    status_command i3blocks -c ~/.config/i3blocks/config
+#    position bottom
+#    tray_output primary
+#    tray_padding 0
+#    separator_symbol "]["
 }
