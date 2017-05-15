@@ -10,10 +10,9 @@
 DOT_DIR="$HOME/.dotfiles"
 
 #necessary for .oh-my-zsh
-git config --global fetch.fsckObjects false
 
 
-git clone --bare https://github.com/northdpole/dotfiles.git $DOT_DIR
+git clone --config fetch.fsckObjects=false --bare https://github.com/northdpole/dotfiles.git $DOT_DIR
 dotfiles="git --git-dir=$DOT_DIR/ --work-tree=$HOME"
 mkdir -p $HOME/.dotfiles-backup
 
@@ -30,7 +29,3 @@ sudo apt-get install zsh-syntax-highlighting zsh htop cowsay fortune-mod vim xcl
 
 # set default shell to zsh
 chsh -s /bin/zsh
-
-
-git config --global fetch.fsckObjects true
-
