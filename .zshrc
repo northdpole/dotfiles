@@ -111,3 +111,6 @@ WATCHFMT="%n from %M has %a tty%l at %T %W"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 MAIL=/var/spool/mail/($whoami) && export MAIL
+
+#start task-web
+task-web --host localhost --port 5678
