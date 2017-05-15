@@ -18,7 +18,7 @@ dotfiles checkout
 dotfiles submodule update --init --recursive
 
 # install dependencies
-sudo apt-get install zsh-syntax-highlighting zsh htop cowsay fortune-mod vim xclip colordiff screen imagemagick zsh-completions git-extras
+sudo apt-get install zsh-syntax-highlighting zsh htop cowsay fortune-mod vim xclip colordiff screen imagemagick git-extras
 
 # set default shell to zsh
 chsh -s /bin/zsh
