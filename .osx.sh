@@ -1,15 +1,11 @@
+# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
 
-function setUpOSX(){
-    # Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-    alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update; sudo gem cleanup'
+# macOS has no `md5sum`, so use `md5` as a fallback
+command -v md5sum > /dev/null || alias md5sum="md5"
 
-    # macOS has no `md5sum`, so use `md5` as a fallback
-    command -v md5sum > /dev/null || alias md5sum="md5"
-
-
-    # macOS has no `sha1sum`, so use `shasum` as a fallback
-    command -v sha1sum > /dev/null || alias sha1sum="shasum"
-
+# macOS has no `sha1sum`, so use `shasum` as a fallback
+command -v sha1sum > /dev/null || alias sha1sum="shasum"
 
 # Recursively delete `.DS_Store` files
 alias ds_story_purge="find . -type f -name '*.DS_Store' -ls -delete"
@@ -23,6 +19,10 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo 
 # Usage: `mergepdf -o output.pdf input{1,2,3}.pdf`
 alias mergepdf='/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py'
 
+
+function setUpOSX(){
+
+export OSX_SETUP=1
 
 # Save to disk (not to iCloud) by default
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
@@ -442,8 +442,8 @@ for app in "Activity Monitor" \
 done
 echo "Done. Note that some of these changes require a logout/restart to take effect."
 
-export OSX_SETUP=1
 }
 
-if [ -z ${OSX_SETUP+"notset"} ]; then echo "OSX hasn't been setup, setting up"; setUpOSX; fi
+
+if [ -z ${OSX_SETUP+"notset"} ]; then echo "OSX hasn't been setup, setting up"; setUpOSX; echo 'Setup complete'; export OSX_SETUP=1; echo $OSX_SETUP; else export OSX_SETUP=1; fi
 
