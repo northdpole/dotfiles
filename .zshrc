@@ -1,10 +1,6 @@
 
-#First find out if it's mac or Linux
-if [ 'Darwin' = $(uname) ]; then export OPERATING_SYSTEM='OSX'; else export OPERATING_SYSTEM='Linux'; fi;
-
-
 # If you come from bash you might have to change your $PATH.
- export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -56,15 +52,27 @@ ZSH_THEME="omega"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gitfast git-extras jsontools mvn pyenv pylint python screen sudo systemd vagrant web-search autopep8 common-aliases compleat django encode64 zsh-completions )
+
+
+
+## plugins=(git gitfast git-extras jsontools mvn pyenv pylint python screen sudo systemd vagrant web-search autopep8 common-aliases compleat django encode64 zsh-completions )
+# Warning you don't need git, cause gitfast is it's faster cousin, git extras is for commands you never use,
+# mvn unless you start doing java again, pyenv is hella slow, systemd is only relevant to linux, autopep8 is slow, you haven't touched django in ages
+plugins=(gitfast jsontools pylint python screen sudo web-search common-aliases compleat encode64 zsh-completions)
 
 source $ZSH/oh-my-zsh.sh
-autoload -U compinit && compinit
+# This is slow and is already called in oh-my-zsh.sh
+# autoload -U compinit && compinit
 
 # User configuration
+source .exportsrc
 
 # OS Specific config
-if [ $OPERATING_SYSTEM = 'OSX' ]; then source .osx.sh; else if [ $OPERATING_SYSTEM = 'Linux' ]; then source .linux.sh; fi;
+ if [ $OPERATING_SYSTEM = 'OSX' ]; then
+   source .osx.sh
+#this part causes invalid end of file #else if [ $OPERATING_SYSTEM = 'Linux' ]; then
+# #   source .linux.sh
+ fi
 
 
 ## add colors to processes for kill completion
@@ -82,24 +90,19 @@ zstyle ':completion:::::' completer _complete _approximate
 zstyle ':completion:*:approximate:*' max-errors 2
 
 # check zshoptions to see what these do
-setopt notify nohashdirs autocd globdots hist_ignore_all_dups noclobber auto_menu \
-        pathdirs cdablevars checkjobs dotglob  histverify histappend autolist listtypes \
-        prompt_subst rmstarsilent complete_in_word nohup
-# export MANPATH="/usr/local/man:$MANPATH"
+setopt notify nohashdirs autocd globdots hist_ignore_all_dups noclobber auto_menu pathdirs cdablevars checkjobs dotglob  histverify histappend autolist listtypes prompt_subst rmstarsilent complete_in_word nohup
+export MANPATH="/usr/local/man:$MANPATH"
 
 # no beep sound
 setopt nolistbeep no_beep
 
 # You may need to manually set your language environment
- export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # get notified when someone logs in
 #watch=all                       # watch all logins
 #logcheck=30                     # every 30 seconds
 #WATCHFMT="%n from %M has %a tty%l at %T %W"
-
-# Preferred editor for local and remote sessions
-export EDITOR='vim'
 
 
 # Compilation flags
@@ -116,7 +119,9 @@ export EDITOR='vim'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias mkvenv="virtualenv venv -p python3 && source venv/bin/activate && pip install -r requirements.txt"
+
+
+# alias mkvenv="virtualenv venv -p python3 && source venv/bin/activate && pip install -r requirements.txt"
 
 #MAIL=/var/spool/mail/($whoami) && export MAIL
 
@@ -157,19 +162,19 @@ function cpv()
   if ! [ -d "$DST" ]; then cpv_rename "$@"; return $?; fi;
 
   # more checks
-  for src in "${SRC[@]}"; do 
+  for src in "${SRC[@]}"; do
     local dst="$DST/$( basename "$src" )"
     if ! [ -e "$src" ]; then echo "$src doesn't exist" ; return 1;
     elif [ -e "$dst" ]; then echo "$dst already exists"; return 1; fi
   done
 
   # actual copy
-  for src in "${SRC[@]}"; do 
-    if ! [ -d "$src" ]; then 
+  for src in "${SRC[@]}"; do
+    if ! [ -d "$src" ]; then
       local dst="$DST/$( basename "$src" )"
       echo -e "\n$src 🡺  $dst"
       pv "$src" > "$dst"
-    else 
+    else
       local dir="$DST/$( basename "$src" )"
       mkdir "$dir" || continue
       local srcs=( $src/* )
@@ -179,17 +184,13 @@ function cpv()
   unset cpv_rename
 }
 
-PATH="/home/user/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/user/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/user/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/user/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/user/perl5"; export PERL_MM_OPT;
-export GOPATH=$HOME/go:$HOME/tools/gobuster
-export GOBIN=$GOPATH/bin
+if [ -x $(which cowsay) -a -x $(which fortune) ]; then
+        fortune -s | cowsay -f daemon;
+fi
+
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 source /usr/local/opt/git-extras/share/git-extras/git-extras-completion.zsh
-export ANDROID_HOME=/usr/local/Caskroom/android-sdk/3859397/
-export ANDROID_SDK_HOME=/usr/local/Caskroom/android-sdk/3859397/
-export PATH=$PATH:$ANDROID_HOME
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
