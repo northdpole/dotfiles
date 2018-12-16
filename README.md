@@ -33,3 +33,17 @@ If you wanna know the dependencies check [.gitmodules](.gitmodules) and [.instal
  - Link to this repo when the Ansible whole system config is done
 
 I've tried to add comments in those configs that explain most of the functionality.
+
+
+## Troubleshooting and misc.
+At the moment, gnome doesn't support multiple scale factors on different displays (that's because Xorg treats different screens as the same display)
+You need an Ubuntu on Wayland session and then to set enable the following:
+
+gsettings set org.gnome.mutter experimental-features "['scale-monitor-framebuffer']"
+To disable: gsettings set org.gnome.mutter experimental-features "[]"
+
+This provides different framebuffers for each monitor so you can scale them individually
+
+## Todo:
+Linux:
+Troubleshoot bluetooth cutting out randomly.
