@@ -58,29 +58,46 @@ ZSH_THEME="omega"
 ## plugins=(git gitfast git-extras jsontools mvn pyenv pylint python screen sudo systemd vagrant web-search autopep8 common-aliases compleat django encode64 zsh-completions )
 # Warning you don't need git, cause gitfast is it's faster cousin, git extras is for commands you never use,
 # mvn unless you start doing java again, pyenv is hella slow, systemd is only relevant to linux, autopep8 is slow, you haven't touched django in ages
-plugins=(gitfast jsontools pylint python screen sudo web-search common-aliases compleat encode64 zsh-completions)
 
+plugins=(gitfast
+jsontools
+pylint
+python 
+sudo
+common-aliases
+compleat 
+encode64 
+zsh-completions 
+kubectl 
+docker 
+autopep8 
+aws 
+extract 
+pip 
+)
+
+echo 1
 source $ZSH/oh-my-zsh.sh
 # This is slow and is already called in oh-my-zsh.sh
 # autoload -U compinit && compinit
 
 # User configuration
-source .exportsrc
+#source .exportsrc
 
 # OS Specific config
- if [ $OPERATING_SYSTEM = 'OSX' ]; then
-   source .osx.sh
+# if [ $OPERATING_SYSTEM = 'OSX' ]; then
+#   source .osx.sh
 #this part causes invalid end of file #else if [ $OPERATING_SYSTEM = 'Linux' ]; then
 # #   source .linux.sh
- fi
+# fi
 
 
 ## add colors to processes for kill completion
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-
+echo 2
 # command completion: highlight matching part of command
 zstyle -e ':completion:*:-command-:*:commands' list-colors 'reply=( '\''=(#b)('\''$words[CURRENT]'\''|)*-- #(*)=0=38;5;45=38;5;136'\'' '\''=(#b)('\''$words[CURRENT]'\''|)*=0=38;5;45'\'' )'
-
+echo 3
 # activate menu selection
 zstyle ':completion:*' menu select
 
@@ -88,9 +105,9 @@ zstyle ':completion:*' menu select
 zstyle ':completion:::::' completer _complete _approximate
 # limit to 2 errors
 zstyle ':completion:*:approximate:*' max-errors 2
-
+echo 4
 # check zshoptions to see what these do
-setopt notify nohashdirs autocd globdots hist_ignore_all_dups noclobber auto_menu pathdirs cdablevars checkjobs dotglob  histverify histappend autolist listtypes prompt_subst rmstarsilent complete_in_word nohup
+setopt notify nohashdirs autocd globdots hist_ignore_all_dups noclobber auto_menu pathdirs cdablevars checkjobs dotglob  histverify histappend inc_append_history  autolist listtypes prompt_subst rmstarsilent complete_in_word nohup
 export MANPATH="/usr/local/man:$MANPATH"
 
 # no beep sound
@@ -100,9 +117,9 @@ setopt nolistbeep no_beep
 export LANG=en_US.UTF-8
 
 # get notified when someone logs in
-#watch=all                       # watch all logins
-#logcheck=30                     # every 30 seconds
-#WATCHFMT="%n from %M has %a tty%l at %T %W"
+watch=all                       # watch all logins
+logcheck=30                     # every 30 seconds
+WATCHFMT="%n from %M has %a tty%l at %T %W"
 
 
 # Compilation flags
@@ -120,77 +137,60 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-
-# alias mkvenv="virtualenv venv -p python3 && source venv/bin/activate && pip install -r requirements.txt"
-
-#MAIL=/var/spool/mail/($whoami) && export MAIL
-
-
-# pv wrapper that imitates cp usage
-
-function cpv()
-{
-  local DST=${@: -1}                    # last element
-  local SRC=( ${@: 1 : $# - 1} )        # array with rest of elements
-
-  # checks
-  type pv &>/dev/null || { echo "install pv first"; return 1; }
-  [ $# -lt 2  ]       && { echo "too few args"    ; return 1; }
+alias dev="cd $HOME/code"
+alias serve="python3 -m http.server"
+alias k="kubectl"
 
 
+# copy with a progress bar.
+alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
 
+# p() {
+#  cd "$PROJECTS/$(find "$PROJECTS" -maxdepth 5 -name .git | sed 's#/\.git$##' | sed "s#^$PROJECTS/##" | selecta)"
+#}
 
-  # special invocation
-  function cpv_rename()
-  {
-    local SRC="$1"
-    local DST="$2"
-    local DSTDIR="$( dirname "$DST" )"
-
-    # checks
-    if   [ $# -ne 2     ]; then echo "too few args"          ; return 1; fi
-    if ! [ -e "$SRC"    ]; then echo "$SRC doesn't exist"    ; return 1; fi
-    if   [ -d "$SRC"    ]; then echo "$SRC is a dir"         ; return 1; fi
-    if ! [ -d "$DSTDIR" ]; then echo "$DSTDIR does not exist"; return 1; fi
-
-    # actual copy
-    echo -e "\n$SRC 🡺  $DST"
-    pv   "$SRC" >"$DST"
-  }
-
-  # special case for cpv_rename()
-  if ! [ -d "$DST" ]; then cpv_rename "$@"; return $?; fi;
-
-  # more checks
-  for src in "${SRC[@]}"; do
-    local dst="$DST/$( basename "$src" )"
-    if ! [ -e "$src" ]; then echo "$src doesn't exist" ; return 1;
-    elif [ -e "$dst" ]; then echo "$dst already exists"; return 1; fi
-  done
-
-  # actual copy
-  for src in "${SRC[@]}"; do
-    if ! [ -d "$src" ]; then
-      local dst="$DST/$( basename "$src" )"
-      echo -e "\n$src 🡺  $dst"
-      pv "$src" > "$dst"
-    else
-      local dir="$DST/$( basename "$src" )"
-      mkdir "$dir" || continue
-      local srcs=( $src/* )
-      cpv "${srcs[@]}" "$dir";
-    fi
-  done
-  unset cpv_rename
+# source dotfiles
+reload() {
+    source $HOME/.zshrc &&
+        echo "Your dot files are now \033[1;32msourced\033[0m."
 }
 
-if [ -x $(which cowsay) -a -x $(which fortune) ]; then
-        fortune -s | cowsay -f daemon;
+
+# auto start tmux 
+#
+if [[ -z "$TMUX" ]] ; then
+    tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
 fi
 
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-source /usr/local/opt/git-extras/share/git-extras/git-extras-completion.zsh
+if [ $commands[helm] ]; then
+        source <(helm completion $(basename ${SHELL}))
+fi
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/vault vault
+if [ $commands[kubectl] ]; then
+        source <(kubectl completion $(basename ${SHELL}))
+fi
+
+if [ $commands[minikube] ]; then
+        source <(minikube completion $(basename $SHELL))
+fi
+
+ # for https://please.build/
+if [ $commands[plz] ]; then
+        source <(plz --completion_script)
+fi
+
+
+function git-update-all-branches(){
+        urrent_branch=$(git branch | grep \* | cut -d ' ' -f2)
+
+        git fetch origin master
+
+        for br in $(git branch --format='%(refname:short)')
+        do
+            (git checkout $br && git rebase origin/master)
+        done
+
+        git checkout $current_branch
+}
+
