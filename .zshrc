@@ -76,7 +76,6 @@ extract
 pip 
 )
 
-echo 1
 source $ZSH/oh-my-zsh.sh
 # This is slow and is already called in oh-my-zsh.sh
 # autoload -U compinit && compinit
@@ -94,10 +93,8 @@ source $ZSH/oh-my-zsh.sh
 
 ## add colors to processes for kill completion
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-echo 2
 # command completion: highlight matching part of command
 zstyle -e ':completion:*:-command-:*:commands' list-colors 'reply=( '\''=(#b)('\''$words[CURRENT]'\''|)*-- #(*)=0=38;5;45=38;5;136'\'' '\''=(#b)('\''$words[CURRENT]'\''|)*=0=38;5;45'\'' )'
-echo 3
 # activate menu selection
 zstyle ':completion:*' menu select
 
@@ -105,7 +102,6 @@ zstyle ':completion:*' menu select
 zstyle ':completion:::::' completer _complete _approximate
 # limit to 2 errors
 zstyle ':completion:*:approximate:*' max-errors 2
-echo 4
 # check zshoptions to see what these do
 setopt notify nohashdirs autocd globdots hist_ignore_all_dups noclobber auto_menu pathdirs cdablevars checkjobs dotglob  histverify histappend inc_append_history  autolist listtypes prompt_subst rmstarsilent complete_in_word nohup
 export MANPATH="/usr/local/man:$MANPATH"
@@ -140,7 +136,7 @@ WATCHFMT="%n from %M has %a tty%l at %T %W"
 alias dev="cd $HOME/code"
 alias serve="python3 -m http.server"
 alias k="kubectl"
-
+alias code="visual-studio-code"
 
 # copy with a progress bar.
 alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
