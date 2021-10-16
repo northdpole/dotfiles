@@ -1,29 +1,49 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+" be iMproved, required
+set nocompatible
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin('~/.vim/bundle/')
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+call plug#begin("~/.vim/plugged")
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'hdima/python-syntax'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" NOTE: you need to install the languages you want with :CocInstall coc-<lang> for this to work
 
-Plugin 'vim-voom/V0oM'
+Plug 'fisadev/vim-isort' " sort python imports https://github.com/fisadev/vim-isort#installation
 
-Plugin 'w0rp/ale' " autocompletion and live linting  https://github.com/w0rp/ale
+call plug#end()
 
-Plugin 'vim-scripts/indentpython.vim' 
+"autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 
-Plugin 'fisadev/vim-isort' " sort python imports https://github.com/fisadev/vim-isort#installation
+" ΝERDTree config:
+" toggle NERDTree with C-n
+" NOTE: insdide NERDTree 
+"   toggle help with ?
+"   Return to open files
+"   Shift-t to open in tab
+"   Shift-s to open vertical split
+"   Shift-i to open horizontal split
+" autocmd vimenter * NERDTree | wincmd p
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+autocmd BufEnter * lcd %:p:h
+map <C-n> :NERDTreeToggle<CR>
 
-Plugin 'Yggdroot/indentLine' " show identation https://github.com/Yggdroot/indentLine
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+" Vim-go config:
+" Note: C-] jumps to a definition
+" C-T jumps back
+let g:go_fmt_command = "goimports" 
+" auto import management
+let g:go_highlight_fields = 1 
+" syntax
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+
+let g:go_auto_type_info = 1 
+" status bar
+let g:go_auto_sameids = 1 
+"matching identifiers
 colorscheme desert
-syntax on
-filetype plugin indent on    " required
 
 fun! <SID>StripTrailingWhitespaces()
     let l = line(".")
@@ -68,12 +88,12 @@ set wildmode=longest,list
 " Comments {{{
 
 " Commenting blocks of code.
-autocmd FileType c,cpp,java,scala,javascript      let b:comment_leader = '// '
-autocmd FileType sh,ruby,python,make              let b:comment_leader = '# '
-autocmd FileType conf,fstab,sysctl                let b:comment_leader = '# '
-autocmd FileType tex                              let b:comment_leader = '% '
-autocmd FileType mail                             let b:comment_leader = '> '
-autocmd FileType vim                              let b:comment_leader = '" '
+autocmd FileType c,cpp,java,scala,javascript,go      let b:comment_leader = '// '
+autocmd FileType sh,ruby,python,make                 let b:comment_leader = '# '
+autocmd FileType conf,fstab,sysctl                   let b:comment_leader = '# '
+autocmd FileType tex                                 let b:comment_leader = '% '
+autocmd FileType mail                                let b:comment_leader = '> '
+autocmd FileType vim                                 let b:comment_leader = '" '
 noremap <F7> :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
 noremap <F8> :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
 
@@ -89,6 +109,7 @@ set comments+=n::
 
 " Encoding {{{
 
+set modifiable
 set termencoding=utf-8
 set encoding=utf-8
 set fileencoding=utf-8
@@ -178,6 +199,7 @@ set autoindent " Auto indent
 set smartindent " Smart indent
 set wrap " Wrap lines
 
+set number
 " }}}
 
 " Colorscheme selection and syntax highlighting {{{
@@ -309,16 +331,3 @@ function! FileSize()
         return (bytes / 1024) . "K"
     endif
 endfunction
-
-
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line

@@ -1,84 +1,40 @@
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH:/home/foobar/.local/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="omega"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="dd/mm/yyyy"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-
-
-
-## plugins=(git gitfast git-extras jsontools mvn pyenv pylint python screen sudo systemd vagrant web-search autopep8 common-aliases compleat django encode64 zsh-completions )
-# Warning you don't need git, cause gitfast is it's faster cousin, git extras is for commands you never use,
-# mvn unless you start doing java again, pyenv is hella slow, systemd is only relevant to linux, autopep8 is slow, you haven't touched django in ages
+COMPLETION_WAITING_DOTS="true"
 
 plugins=(gitfast
 jsontools
 pylint
-python 
+python
 sudo
 common-aliases
-compleat 
-encode64 
-zsh-completions 
-kubectl 
-docker 
-autopep8 
-aws 
-extract 
-pip 
+compleat
+encode64
+zsh-completions
+kubectl
+docker
+autopep8
+aws
+extract
+gitfast
+pip
 )
 
 source $ZSH/oh-my-zsh.sh
-# This is slow and is already called in oh-my-zsh.sh
-# autoload -U compinit && compinit
+
 
 # User configuration
 #source .exportsrc
@@ -118,11 +74,7 @@ logcheck=30                     # every 30 seconds
 WATCHFMT="%n from %M has %a tty%l at %T %W"
 
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -136,7 +88,7 @@ WATCHFMT="%n from %M has %a tty%l at %T %W"
 alias dev="cd $HOME/code"
 alias serve="python3 -m http.server"
 alias k="kubectl"
-alias code="visual-studio-code"
+
 
 # copy with a progress bar.
 alias cpv="rsync -poghb --backup-dir=/tmp/rsync -e /dev/null --progress --"
@@ -176,17 +128,19 @@ if [ $commands[plz] ]; then
         source <(plz --completion_script)
 fi
 
+# cache ssh keys
+eval $(ssh-agent) &> /dev/null
 
 function git-update-all-branches(){
         urrent_branch=$(git branch | grep \* | cut -d ' ' -f2)
-
         git fetch origin master
-
         for br in $(git branch --format='%(refname:short)')
         do
             (git checkout $br && git rebase origin/master)
         done
-
         git checkout $current_branch
 }
 
+
+alias pip=pip3
+alias python=python3
