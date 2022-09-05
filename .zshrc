@@ -1,6 +1,6 @@
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH:/home/foobar/.local/bin
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH:/home/foobar/.local/bin:/snap/bin
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -15,7 +15,7 @@ ZSH_THEME="omega"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(gitfast
+plugins=(
 jsontools
 pylint
 python
@@ -144,3 +144,10 @@ function git-update-all-branches(){
 
 alias pip=pip3
 alias python=python3
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform

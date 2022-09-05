@@ -8,7 +8,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 git_custom_status() {
     local cb=$(git_current_branch)
     if [ -n "$cb" ]; then
-	echo "$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX$(parse_git_dirty)%{$fg_bold[yellow]%}$(work_in_progress)%{$reset_color%}"
+	echo "$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX$(parse_git_dirty)%{$fg_bold[yellow]%}%{$reset_color%}"
     fi
 }
 
