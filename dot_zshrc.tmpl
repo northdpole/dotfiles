@@ -1,7 +1,10 @@
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH:/home/foobar/.local/bin:/snap/bin
-
+{{- if eq .chezmoi.os "darwin" }}
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH:$HOME/.local/bin
+{{- else }}
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH:{{ .chezmoi.homeDir }}/.local/bin:/snap/bin
+{{- end }}
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -104,10 +107,9 @@ reload() {
 }
 
 
-# auto start tmux 
-#
-if [[ -z "$TMUX" ]] ; then
-    tmux attach-session -t ssh_tmux || tmux new-session -s ssh_tmux
+# auto attach tmux session ssh_tmux in interactive shells
+if [[ -o interactive ]] && [[ -z "$TMUX" ]] && command -v tmux >/dev/null 2>&1; then
+    tmux new-session -A -s ssh_tmux
 fi
 
 
@@ -128,13 +130,13 @@ if [ $commands[plz] ]; then
         source <(plz --completion_script)
 fi
 
-    # ssh keys: macOS launchd already runs an agent (SSH_AUTH_SOCK); never spawn a new one per shell.
-    # Reload keys stored in Keychain (added once with: ssh-add --apple-use-keychain <key>)
-    if [[ "$OSTYPE" == darwin* ]]; then
-        ssh-add --apple-load-keychain -q 2>/dev/null
-    elif [[ -z "$SSH_AUTH_SOCK" ]]; then
-        eval "$(ssh-agent -s)" &>/dev/null
-    fi
+# ssh keys: macOS launchd already runs an agent (SSH_AUTH_SOCK); never spawn a new one per shell.
+# Reload keys stored in Keychain (added once with: ssh-add --apple-use-keychain <key>)
+if [[ "$OSTYPE" == darwin* ]]; then
+    ssh-add --apple-load-keychain -q 2>/dev/null
+elif [[ -z "$SSH_AUTH_SOCK" ]]; then
+    eval "$(ssh-agent -s)" &>/dev/null
+fi
 
 function git-update-all-branches(){
         urrent_branch=$(git branch | grep \* | cut -d ' ' -f2)
@@ -155,4 +157,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
+if command -v terraform >/dev/null 2>&1; then
+  complete -o nospace -C "$(command -v terraform)" terraform
+fi

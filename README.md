@@ -4,7 +4,21 @@ Adapted from uberspot/dotfiles
 
 This repo is more of a collection of things that you might find useful rather than a generic solution for every user.
 
-Install with
+Install with [chezmoi](https://www.chezmoi.io/) (recommended):
+
+    brew install chezmoi   # macOS
+    git clone https://github.com/northdpole/dotfiles.git ~/Projects/dotfiles
+    mkdir -p ~/.config/chezmoi
+    echo 'sourceDir = "'$HOME'/Projects/dotfiles"' > ~/.config/chezmoi/chezmoi.toml
+    chezmoi apply
+
+Or use the bootstrap script from [new-system-hardening-and-setup](https://github.com/northdpole/new-system-hardening-and-setup):
+
+    ./bootstrap.sh --trusted-network --dotfiles -y
+
+Source files use chezmoi naming (`dot_zshrc.tmpl` → `~/.zshrc`, `dot_config/` → `~/.config/`, etc.).
+
+Legacy wget install (deprecated):
 
     cd $HOME
     wget https://raw.githubusercontent.com/northdpole/dotfiles-1/master/.install.sh -O temp_install.sh

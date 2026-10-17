@@ -1,17 +1,27 @@
 " be iMproved, required
 set nocompatible
 
+if !filereadable(expand('~/.vim/autoload/plug.vim'))
+  echohl ErrorMsg | echom 'vim-plug missing: re-run bootstrap --dotfiles' | echohl None
+else
 call plug#begin("~/.vim/plugged")
 
 Plug 'scrooloose/nerdtree'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+if $OSTYPE =~# '^darwin'
+  Plug 'fatih/vim-go'
+else
+  Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+endif
 Plug 'hdima/python-syntax'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" NOTE: you need to install the languages you want with :CocInstall coc-<lang> for this to work
+if $OSTYPE !~# '^darwin'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Install languages with :CocInstall coc-<lang>
+endif
 
 Plug 'fisadev/vim-isort' " sort python imports https://github.com/fisadev/vim-isort#installation
 
 call plug#end()
+endif
 
 "autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 
@@ -72,7 +82,9 @@ set autowrite
 set clipboard=unnamed " yank and paste with the system clipboard
 
 filetype indent plugin on
-set dictionary=/usr/share/dict/words
+if filereadable('/usr/share/dict/words')
+  set dictionary=/usr/share/dict/words
+endif
 
 set ffs=unix,dos,mac " Use Unix as the standard file type
 

@@ -241,3 +241,9 @@
 # # or, if you want to leave it in your working tree
 # git rm --cached asubmodule
 # rm -rf .git/modules/asubmodule
+{{- if eq .chezmoi.os "darwin" }}
+
+# falls back to the launchd ssh-agent when SSH_AUTH_SOCK is unset or dead (installed by the setup repo's git-signing task)
+[gpg "ssh"]
+	program = {{ .chezmoi.homeDir }}/bin/git-ssh-sign
+{{- end }}

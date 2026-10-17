@@ -1,3 +1,12 @@
+{{- if eq .chezmoi.os "darwin" -}}
+# macOS profile (minimal; full Linux profile below is skipped)
+export EDITOR="vim"
+export SUDO_EDITOR="vim"
+export PAGER="less"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export PATH="$HOME/bin:/usr/local/bin:$PATH"
+{{- else -}}
 # Set defaults
 export EDITOR="vim"
 export SUDO_EDITOR="vim"
@@ -61,18 +70,6 @@ fi
 # define the prefered visual terminal
 export VTERM="x-terminal-emulator"
 
-# Firefox
-#export MOZ_GLX_IGNORE_BLACKLIST=1
-#export MOZ_USE_OMTC=1
-#export MOZILLA_X11_XINITTHREADS=1
-#export MOX_X_THREADSAFE=1
-#export MOZ_ACCELERATED=1
-#export MOZ_DISABLE_CRASHREPORTER=1
-#export MOZ_DISABLE_PANGO=1
-
-#[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
-#[[ "$(tty)" == "/dev/tty1" ]] && [[ $- == *i* ]] && exec startx
-
 export ANDROID_HOME="/opt/android-sdk"
 
 # LC_* variables are send via ssh, this will print a message on vulnerable hosts
@@ -80,7 +77,11 @@ export LC_SHOCKED="() { :;};echo THIS HOST IS SHELL SHOCKED!"
 
 export BINARY_SSH="/usr/bin/ssh"
 
-# remap caps lock to esc key, while ensuring you're not stuck in CAPS on mode
-command -v xmodmap >/dev/null 2>&1 || { xmodmap -e 'clear Lock'; xmodmap -e 'keycode 0x42=Escape'; }
+# remap caps lock to esc key
+if command -v xmodmap >/dev/null 2>&1; then
+  xmodmap -e 'clear Lock'
+  xmodmap -e 'keycode 0x42=Escape'
+fi
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+{{- end -}}

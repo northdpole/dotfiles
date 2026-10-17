@@ -1,0 +1,10 @@
+[[ -e ~/.profile ]] && emulate sh -c 'source ~/.profile'
+{{- if eq .chezmoi.os "darwin" }}
+# Homebrew PATH for GUI terminals and non-login shells
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv zsh)"
+fi
+export PATH="$HOME/.local/bin:$PATH"
+{{- end }}
