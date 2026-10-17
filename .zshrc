@@ -128,8 +128,13 @@ if [ $commands[plz] ]; then
         source <(plz --completion_script)
 fi
 
-# cache ssh keys
-eval $(ssh-agent) &> /dev/null
+    # ssh keys: macOS launchd already runs an agent (SSH_AUTH_SOCK); never spawn a new one per shell.
+    # Reload keys stored in Keychain (added once with: ssh-add --apple-use-keychain <key>)
+    if [[ "$OSTYPE" == darwin* ]]; then
+        ssh-add --apple-load-keychain -q 2>/dev/null
+    elif [[ -z "$SSH_AUTH_SOCK" ]]; then
+        eval "$(ssh-agent -s)" &>/dev/null
+    fi
 
 function git-update-all-branches(){
         urrent_branch=$(git branch | grep \* | cut -d ' ' -f2)
